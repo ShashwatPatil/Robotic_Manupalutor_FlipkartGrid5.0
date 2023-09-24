@@ -1,0 +1,47 @@
+<launch>
+
+  <!-- This block of code is to call empty_world.launch file to fire up gazebo with
+                empty world and then load world1 from our pkg -->
+  <arg name="world" default="empty"/>
+  <arg name="paused" default="false"/>
+  <arg name="use_sim_time" default="true"/>
+  <arg name="gui" default="true"/>
+  <arg name="headless" default="false"/>
+  <arg name="debug" default="false"/>
+  
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="paused" value="$(arg paused)"/>
+    <arg name="use_sim_time" value="$(arg use_sim_time)"/>
+    <arg name="gui" value="$(arg gui)"/>
+    <arg name="headless" value="$(arg headless)"/>
+    <arg name="debug" value="$(arg debug)"/>
+  </include>
+
+<!-- Coordinates of bot which we need to spawn -->
+    <arg name="x" default="0"/>
+    <arg name="y" default="0"/>
+    <arg name="z" default="0"/>
+    <arg name="roll" value="0.0"/>
+    <arg name="pitch" value="0.0"/>
+    <arg name="yaw" value="1.57"/>
+    
+    <!-- Calling spawing node to spawn our robot in gazebo -->
+   <node name="robotic_arm" pkg="gazebo_ros" type="spawn_model" output="screen" 
+    args="-urdf -param robot_description -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw) -model SGP " />
+    <!--    -J arm1_C2 -1.5 -J arm2_C3 0.58   -->
+  
+  <param name="robot_description" command="cat '$(find robotic_arm_pkg)/urdf/ROBOTIC_ARM.urdf'"/>
+
+  <!-- Robot state publisher -->
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" />
+  <!-- Load joint controller configurations from YAML file to parameter server -->
+  <rosparam file="$(find robotic_arm_pkg)/config/robotic_arm_jnt_pos_ctrl.yaml" command="load"/>
+   
+  <!-- load the controllers -->
+  <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" args="plate_C1_joint_position_controller arm1_C2_joint_position_controller arm2_C3_position_controller EE_vac_joint_position_controller joint_state_controller"/>
+  
+  <node name="rviz" pkg="rviz" type="rviz"/>
+
+  
+</launch>

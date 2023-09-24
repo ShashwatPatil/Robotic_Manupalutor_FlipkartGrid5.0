@@ -1,0 +1,327 @@
+<?xml version="1.0" ?>
+<robot name="robo_arm">
+	<!--plugin to control robotic arm  -->
+
+	<gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+    </plugin>
+  </gazebo>
+
+	<!-- End -->
+
+
+    <link name="base_link">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+				<box size="0.03 0.03 0.002"/>
+            </geometry>
+        </visual> 
+    </link>
+
+
+	<!-- Connectors -->
+
+    <link name="C1">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+				<sphere radius="0.005"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <link name="C2">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+				<sphere radius="0.05"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <link name="C3">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+				<sphere radius="0.05"/>
+            </geometry>
+        </visual>
+    </link>
+
+
+	<!-- other parts -->
+
+
+    <link name="base_plate">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="20.0"/>
+            <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+        </inertial>
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+				<box size="0.3 0.3 0.02"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+	 	        <box size="0.3 0.3 0.02"/>
+            </geometry>
+        </collision> 
+    </link>
+
+
+    <link name="arm1">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="0.3"/>
+            <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0.5" rpy="0 0 0"/>
+            <geometry>
+				<box size="0.12 0.12 1"/>
+            </geometry>
+            <material name="white">
+                <color rgba="1 1 1 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0.5"/>
+            <geometry>
+	 	        <box size="0.12 0.12 1"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="arm2">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="0.20"/>
+            <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0.25" rpy="0 0 0"/>
+            <geometry>
+				<box size="0.12 0.12 0.5"/>
+            </geometry>
+            <material name="white">
+                <color rgba="1 1 1 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0.5"/>
+            <geometry>
+	 	        <box size="0.12 0.12 0.5"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="EE">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="0.10"/>
+            <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0.1" rpy="0 0 0"/>
+            <geometry>
+				<box size="0.12 0.12 0.2"/>
+            </geometry>
+            <material name="white">
+                <color rgba="1 1 1 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+	 	        <box size="0.12 0.12 0.2"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="vac">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="0.10"/>
+            <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0.05" rpy="0 0 0"/>
+            <geometry>
+				<cylinder length="0.1" radius="0.07"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+	 	        <cylinder length="0.15" radius="0.07"/>
+            </geometry>
+        </collision>
+    </link>
+
+
+	<!--  JOINTS  -->
+
+    <joint name="base_link_plate" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="base_link"/>
+      <child link="base_plate"/>
+    </joint>
+
+    <joint name="plate_C1" type="revolute">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="base_plate"/>
+      <child link="C1"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="-3.14" upper="3.14" effort="2.0" velocity="10.0"/>
+    </joint>
+
+    <joint name="C1_arm1" type="fixed">
+      <origin xyz="0 0 0.05" rpy="-0.785 0 0"/>
+      <parent link="C1"/>
+      <child link="arm1"/>
+    </joint>
+
+    <joint name="arm1_C2" type="revolute">
+      <origin xyz="0 0 1" rpy="0 0 0"/>
+      <parent link="arm1"/>
+      <child link="C2"/>
+      <axis xyz="1 0 0"/>
+      <limit lower="-1" upper="1" effort="2.0" velocity="10.0"/>
+    </joint>
+
+    <joint name="C2_arm2" type="fixed">
+      <origin xyz="0 0 0" rpy="-0.785 0 0"/>
+      <parent link="C2"/>
+      <child link="arm2"/>
+    </joint>
+
+
+    <joint name="arm2_C3" type="revolute">
+      <origin xyz="0 0 0.5" rpy="0 0 0"/>
+      <parent link="arm2"/>
+      <child link="C3"/>
+      <axis xyz="1 0 0"/>
+      <limit lower="-0.5" upper="3.15" effort="2.0" velocity="10.0"/>
+    </joint>
+
+    <joint name="C3_EE" type="fixed">
+      <origin xyz="0 0 0" rpy="-1.57 0 0"/>
+      <parent link="C3"/>
+      <child link="EE"/>
+    </joint>
+
+    <joint name="EE_vac" type="revolute">
+      <origin xyz="0 0 0.2" rpy="0 0 0"/>
+      <parent link="EE"/>
+      <child link="vac"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="-3.14" upper="3.14" effort="2.0" velocity="10.0"/>
+    </joint>
+	<!-- Transmission -->
+		<transmission name="plate_C1_trans">
+			<type>transmission_interface/SimpleTransmission</type>
+			<joint name="plate_C1">
+				<hardwareInterface>EffortJointInterface</hardwareInterface>
+			</joint>
+			<actuator name="plate_C1_actuator">
+				<mechanicalReduction>1</mechanicalReduction>
+			</actuator>
+  	</transmission>
+
+		<transmission name="arm1_C2_trans">
+			<type>transmission_interface/SimpleTransmission</type>
+			<joint name="arm1_C2">
+				<hardwareInterface>EffortJointInterface</hardwareInterface>
+			</joint>
+			<actuator name="arm1_C2_actuator">
+				<mechanicalReduction>1</mechanicalReduction>
+			</actuator>
+  	</transmission>
+
+		<transmission name="arm2_C3_trans">
+			<type>transmission_interface/SimpleTransmission</type>
+			<joint name="arm2_C3">
+				<hardwareInterface>EffortJointInterface</hardwareInterface>
+			</joint>
+			<actuator name="arm2_C3_actuator">
+				<mechanicalReduction>1</mechanicalReduction>
+			</actuator>
+  	</transmission>
+
+		<transmission name="EE_vac_trans">
+			<type>transmission_interface/SimpleTransmission</type>
+			<joint name="EE_vac">
+				<hardwareInterface>EffortJointInterface</hardwareInterface>
+			</joint>
+			<actuator name="EE_vac_actuator">
+				<mechanicalReduction>1</mechanicalReduction>
+			</actuator>
+  	</transmission>
+
+	<!-- cam joint -->
+
+	<joint name="camera_joint" type="fixed">
+			<parent link="base_link"/>
+			<child link="camera_link"/>
+			<origin xyz="0 1.2 1.1" rpy="0 -1.57 1.57"/>
+	</joint>
+
+	<!--  camera and sensors -->
+
+	<link name="camera_link">
+			<visual>
+					<geometry>
+							<box size="0.010 0.03 0.03"/>
+					</geometry>
+					<material name="red"/>
+			</visual>
+	</link>
+
+	<joint name="camera_optical_joint" type="fixed">
+			<origin xyz="0 0 0" rpy="0 0 0" />
+			<parent link="camera_link" />
+			<child link="camera_link_optical" />
+	</joint>
+
+	<link name="camera_link_optical"></link>
+
+
+    <gazebo reference="camera_link">
+      <sensor type="camera" name="camera">
+        <update_rate>30.0</update_rate>
+        <camera>
+          <pose>0 0 0 0 0 3.14</pose>
+          <horizontal_fov>1.089</horizontal_fov>
+          <image>
+            <format>R8G8B8</format>
+            <width>1020</width>
+            <height>1020</height>
+          </image>
+          <clip>
+            <near>0.01</near>
+            <far>100</far>
+          </clip>
+        </camera>
+
+        <plugin name="camera_camera_controller" filename="libgazebo_ros_camera.so">
+          <alwaysOn>true</alwaysOn>
+          <updateRate>0.0</updateRate>
+          <cameraName>camera</cameraName>
+          <imageTopicName>image_raw</imageTopicName>
+          <cameraInfoTopicName>camera_info</cameraInfoTopicName>
+          <frameName>camera_link</frameName>
+          <hackBaseline>0.07</hackBaseline>
+          <distortionK1>0.0</distortionK1>
+          <distortionK2>0.0</distortionK2>
+          <distortionK3>0.0</distortionK3>
+          <distortionT1>0.0</distortionT1>
+          <distortionT2>0.0</distortionT2>
+        </plugin>
+      </sensor>
+    </gazebo>
+</robot>

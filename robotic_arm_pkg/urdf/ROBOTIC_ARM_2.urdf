@@ -1,0 +1,238 @@
+<?xml version="1.0" ?>
+<robot name="robo_arm">
+	<!-- End -->
+
+
+    <link name="base_link">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+				<box size="0.2 0.2 0.002"/>
+            </geometry>
+        </visual> 
+    </link>
+
+    <link name="crate">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0.45 -0.15"/>
+            <geometry>
+				<box size="0.6 0.4 0.3"/>
+            </geometry>
+        </visual> 
+    </link>
+
+
+	<!-- Connectors -->
+
+    <link name="C1">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+				<sphere radius="0.005"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <link name="C2">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+				<sphere radius="0.015"/>
+            </geometry>
+        </visual>
+    </link>
+
+    <link name="C3">
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+				<sphere radius="0.015"/>
+            </geometry>
+        </visual>
+    </link>
+
+
+	<!-- other parts -->
+
+
+    <link name="base_plate">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="20.0"/>
+            <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+        </inertial>
+        <visual>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+				<box size="0.2 0.2 0.02"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+	 	        <box size="0.2 0.2 0.02"/>
+            </geometry>
+        </collision> 
+    </link>
+
+
+    <link name="arm1">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="0.3"/>
+            <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0.175" rpy="0 0 0"/>
+            <geometry>
+				<box size="0.06 0.06 0.35"/>
+            </geometry>
+            <material name="white">
+                <color rgba="1 1 1 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0.175"/>
+            <geometry>
+				<box size="0.06 0.06 0.35"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="arm2">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="0.20"/>
+            <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0.175" rpy="0 0 0"/>
+            <geometry>
+				<box size="0.06 0.06 0.35"/>
+            </geometry>
+            <material name="white">
+                <color rgba="1 1 1 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0.175"/>
+            <geometry>
+				<box size="0.06 0.06 0.35"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="EE">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="0.10"/>
+            <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0.05" rpy="0 0 0"/>
+            <geometry>
+				<box size="0.06 0.06 0.1"/>
+            </geometry>
+            <material name="white">
+                <color rgba="1 1 1 1"/>
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0.05" rpy="0 0 0"/>
+            <geometry>
+				<box size="0.06 0.06 0.1"/>
+            </geometry>
+        </collision>
+    </link>
+
+    <link name="vac">
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <mass value="0.10"/>
+            <inertia ixx="1" ixy="0" ixz="0" iyy="1" iyz="0" izz="1"/>
+        </inertial>
+        <visual>
+            <origin xyz="0 0 0.075" rpy="0 0 0"/>
+            <geometry>
+				<cylinder length="0.15" radius="0.05"/>
+            </geometry>
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="0 0 0"/>
+            <geometry>
+				<cylinder length="0.15" radius="0.05"/>
+            </geometry>
+        </collision>
+    </link>
+
+
+	<!--  JOINTS  -->
+
+    <joint name="base_link_plate" type="revolute">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="base_link"/>
+      <child link="base_plate"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="-3.14" upper="3.14" effort="2.0" velocity="10.0"/>
+    </joint>
+
+
+    <joint name="base_link_crate" type="fixed">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="base_link"/>
+      <child link="crate"/>
+    </joint>
+
+    <joint name="plate_C1" type="revolute">
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <parent link="base_plate"/>
+      <child link="C1"/>
+      <axis xyz="1 0 0"/>
+      <limit lower="0" upper="0.61" effort="2.0" velocity="10.0"/>
+    </joint>
+
+    <joint name="C1_arm1" type="fixed">
+      <origin xyz="0 0 0.05" rpy="-0.785 0 0"/>
+      <parent link="C1"/>
+      <child link="arm1"/>
+    </joint>
+
+    <joint name="arm1_C2" type="revolute">
+      <origin xyz="0 0 0.35" rpy="0 0 0"/>
+      <parent link="arm1"/>
+      <child link="C2"/>
+      <axis xyz="1 0 0"/>
+      <limit lower="-1.12" upper="0" effort="2.0" velocity="10.0"/>
+    </joint>
+
+    <joint name="C2_arm2" type="fixed">
+      <origin xyz="0 0 0" rpy="-0.785 0 0"/>
+      <parent link="C2"/>
+      <child link="arm2"/>
+    </joint>
+
+
+    <joint name="arm2_C3" type="revolute">
+      <origin xyz="0 0 0.35" rpy="0 0 0"/>
+      <parent link="arm2"/>
+      <child link="C3"/>
+      <axis xyz="1 0 0"/>
+      <limit lower="-0.7" upper="3.15" effort="2.0" velocity="10.0"/>
+    </joint>
+
+    <joint name="C3_EE" type="fixed">
+      <origin xyz="0 0 0" rpy="-1.57 0 0"/>
+      <parent link="C3"/>
+      <child link="EE"/>
+    </joint>
+
+    <joint name="EE_vac" type="revolute">
+      <origin xyz="0 0 0.1" rpy="0 0 0"/>
+      <parent link="EE"/>
+      <child link="vac"/>
+      <axis xyz="0 0 1"/>
+      <limit lower="-3.14" upper="3.14" effort="2.0" velocity="10.0"/>
+    </joint>
+
+
+</robot>

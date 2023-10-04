@@ -1,0 +1,11 @@
+controller_list:
+  - name: fake_SGP_robotic_arm_controller
+    type: $(arg fake_execution_type)
+    joints:
+      - plate_C1
+      - arm1_C2
+      - arm2_C3
+      - EE_vac
+initial:  # Define initial robot poses per group
+  - group: SGP_robotic_arm
+    pose: default

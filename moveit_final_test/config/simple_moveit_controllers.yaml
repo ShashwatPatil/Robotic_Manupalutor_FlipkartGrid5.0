@@ -1,0 +1,10 @@
+controller_list:
+  - name: SGP_robotic_arm_controller
+    action_ns: follow_joint_trajectory
+    type: FollowJointTrajectory
+    default: True
+    joints:
+      - plate_C1
+      - arm1_C2
+      - arm2_C3
+      - EE_vac
